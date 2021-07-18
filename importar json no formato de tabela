@@ -4,7 +4,7 @@ Antes de começar com os codigos certifique que ativação foi feita, conforme d
 2 - Clique no botão duas vezes e coloque o codigo que irá buscar o arquivo json e abrir no excel como tabela
 3 - verificar o caminho que ficará o json para descrever no codigo (estará nem negrito para que possa descrever)
 
-## Segue o codigo 
+Segue o codigo 
 
 'localizar o arquivo json
 
@@ -43,7 +43,7 @@ End Sub
 
 
 
-## segue arquivo disk.json para teste ( todos os dados não são reais)
+Segue arquivo disk.json para teste ( todos os dados não são reais)
 - lembre -se de colocar o arquivo em downloads e de inserir seu user no caminho, o restante deixar como estar
 
 
