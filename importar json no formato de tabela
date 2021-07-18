@@ -1,0 +1,85 @@
+Antes de começar com os codigos certifique que ativação foi feita, conforme descrito no arquivo habilitando o recurso
+ 
+1 - Após abrir o Microsoft virtual basic, cria um userform para colocar um botão nele
+2 - Clique no botão duas vezes e coloque o codigo que irá buscar o arquivo json e abrir no excel como tabela
+3 - verificar o caminho que ficará o json para descrever no codigo (estará nem negrito para que possa descrever)
+
+## Segue o codigo 
+
+'localizar o arquivo json
+
+ActiveWorkbook.Queries.Add Name:=**"nome do arquivo"**, Formula:= _
+        "let" & Chr(13) & "" & Chr(10) & "    Fonte = Json.Document(File.Contents(**""caminho de onde esta o arquivo\nome do arquivo.json""**))," & Chr(13) & "" & Chr(10) & "    #""Convertido para Tabela"" = Table.FromList(Fonte, Splitter.SplitByNothing(), null, null, ExtraValues.Error)," & Chr(13) & "" & Chr(10) & "    #""Column1 Expandido"" = Table.ExpandRecordColumn(#""Convertido para Tabela"", ' aqui inserá as colunas que tenha no arquivo para transformar em tabela
+        **""Column1"", {""Location"", ""ResourceGroupName"", ""Name"", **""nome do arquivo"** & _
+        "tate"", ""DiskSizeGB""}, {""Column1.Location"", ""Column1.ResourceGroupName"", ""Column1.Name"", ""Column1.DiskState"", ""Column1.DiskSizeGB""})" & Chr(13) & "" & Chr(10) & "in" & Chr(13) & "" & Chr(10) & "    #""Column1 Expandido"""**
+    ' depois de pegar o arquivo e mostrar o que tem nele, vamos converter no excel json em tabela
+    ActiveWorkbook.Worksheets(**"nome da planilha que ficará a tabela"**).Activate
+    With ActiveSheet.ListObjects.Add(SourceType:=0, Source:= _
+        "OLEDB;Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=disk;Extended Properties=""""" _
+        , Destination:=Range("$A$1")).QueryTable
+        .CommandType = xlCmdSql
+        .CommandText = Array("SELECT * FROM [**nome do arquivo **]")
+        .RowNumbers = False
+        .FillAdjacentFormulas = False
+        .PreserveFormatting = True
+        .RefreshOnFileOpen = False
+        .BackgroundQuery = True
+        .RefreshStyle = xlInsertDeleteCells
+        .SavePassword = False
+        .SaveData = True
+        .AdjustColumnWidth = True
+        .RefreshPeriod = 0
+        .PreserveColumnInfo = True
+        .ListObject.DisplayName = "disk"
+        .Refresh BackgroundQuery:=False
+    End With
+    ' remover filtro
+       Selection.AutoFilter
+       ' mensagem para saber que já finalizou a importação e conversão 
+    
+MsgBox ("Concluido com sucesso a importação")
+
+End Sub
+
+
+
+## segue arquivo disk.json para teste ( todos os dados não são reais)
+- lembre -se de colocar o arquivo em downloads e de inserir seu user no caminho, o restante deixar como estar
+
+
+
+Private Sub importar_Click()
+
+Sheets("azure-disco").Select
+    Columns("A:E").Select
+    Selection.ClearContents
+    Range("A1").Select
+    
+     ActiveWorkbook.Queries.Add Name:="disk", Formula:= _
+        "let" & Chr(13) & "" & Chr(10) & "    Fonte = Json.Document(File.Contents(""C:\Users\** seu nome**\Downloads\disk.json""))," & Chr(13) & "" & Chr(10) & "    #""Convertido para Tabela"" = Table.FromList(Fonte, Splitter.SplitByNothing(), null, null, ExtraValues.Error)," & Chr(13) & "" & Chr(10) & "    #""Column1 Expandido"" = Table.ExpandRecordColumn(#""Convertido para Tabela"", ""Column1"", {""Location"", ""ResourceGroupName"", ""Name"", ""DiskS" & _
+        "tate"", ""DiskSizeGB""}, {""Column1.Location"", ""Column1.ResourceGroupName"", ""Column1.Name"", ""Column1.DiskState"", ""Column1.DiskSizeGB""})" & Chr(13) & "" & Chr(10) & "in" & Chr(13) & "" & Chr(10) & "    #""Column1 Expandido"""
+    ActiveWorkbook.Worksheets("azure-disco").Activate
+    With ActiveSheet.ListObjects.Add(SourceType:=0, Source:= _
+        "OLEDB;Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=disk;Extended Properties=""""" _
+        , Destination:=Range("$A$1")).QueryTable
+        .CommandType = xlCmdSql
+        .CommandText = Array("SELECT * FROM [disk]")
+        .RowNumbers = False
+        .FillAdjacentFormulas = False
+        .PreserveFormatting = True
+        .RefreshOnFileOpen = False
+        .BackgroundQuery = True
+        .RefreshStyle = xlInsertDeleteCells
+        .SavePassword = False
+        .SaveData = True
+        .AdjustColumnWidth = True
+        .RefreshPeriod = 0
+        .PreserveColumnInfo = True
+        .ListObject.DisplayName = "disk"
+        .Refresh BackgroundQuery:=False
+    End With
+          Selection.AutoFilter
+    
+MsgBox ("Concluido com sucesso a importação")
+
+End Sub

@@ -1,0 +1,14 @@
+# Atenção dependendo da versão do seu pacote office poderá haver alguma diferença, porem o conceito é o mesmo.
+
+## Mão a obra - Abra seu excel
+
+1 - Com excel aberto vá em arquivo e central de confiabilidade
+2 - Será aberto outra aba selecione >  configurar central de confiabiliadade
+3 - Será aberto outra aba >  Vá na opção configuração de macro
+4 - habilitar o macro
+5 - Salvar tudo.
+
+Para abrir o VBA ( Microsoft virtual basic) para digitar os codigos clique no teclado as teclas ctrl+f11
+
+Bons estudos!
+
